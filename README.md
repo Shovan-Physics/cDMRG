@@ -33,14 +33,15 @@
      math -noprompt -run '<<cDMRG_input.m' N gamma Nwell V0 M basisid epsid saveid &
   
   where
-     N is the number of particles
-     gamma is the dimensionless interaction strength
-     Nwell is the number of potential minima
-     V0 is the potential depth in units of recoil
-     M is the number of segments
-     basisid is the ID for basis parameters
-     epsid is the ID for DMRG parameters
-     saveid is the ID for save parameters.
+  
+     N -- number of particles
+     gamma -- dimensionless interaction strength
+     Nwell -- number of potential minima
+     V0 -- potential depth in units of recoil
+     M -- number of segments
+     basisid -- ID for basis parameters
+     epsid -- ID for DMRG parameters
+     saveid -- ID for save parameters.
 
   The results are stored in the directory "Runs".
 
