@@ -5,11 +5,33 @@ systems by spatial partitioning into segments with continuous basis functions.
 It is distinct from cMPS.
 The code is written for bosons with contact interactions trapped in a box with a sinusoidal potential.
 
-## Modules
+## Installation
+
+In order to get this code running on your machine follow these steps.
+
+### Prerequisites
+
+- We've tested this package on Unix only, however running on Win10 should be straighforward
+  with the build tools.
+- [Install and build ITensor 3 (C++ version)](https://itensor.org/)
+- [Install Mathematica ???](https://www.wolfram.com/mathematica/)
+
+### First steps
+
+- Clone this repository ANYWHERE OR SOME SPECIAL LOCATION WITH RESPECT TO ITENSOR DIR???
+- Update configs ONLY THE MAKEFILE?
+- Build binaries:
+  ```console
+  make build
+  ```
+- THAT'S IT?
+- WHICH COMMAND TO RUN AND HOW TO CHECK THE RESULT
+
+## Structure
 
 cDMRG consists of two main modules:
-- DMRG module using the ITensor library 
-- input module written in Mathematica
+- DMRG Module using the ITensor library 
+- Input Module written in Mathematica
 
 ### DMRG Module
 
@@ -52,18 +74,20 @@ where
 
 The results are stored in the directory `Runs`.
 
-## IDs / Stored Inputs
+## Usage Details
+
+### IDs / Stored Inputs
 
 The parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
 `basistable.m`, `epstable.m`, and `savetable.m` in the `Parameters` directory,
 with unique integer pointers that act as IDs.
 One can add more entries using a text editor or the function `storenewparam` in `cDMRG_input_documentation.nb`.
 
-## Sample Outputs
+### Sample Outputs
 
 Results from a sample run are stored in the `Runs` directory and illustrated with plots in the notebook `cDMRG_example_output.nb`.
 
-## Basis splitting
+### Basis splitting
 
 Codes for splitting a segment at an arbitrary point, and calculating the bipartite entanglement
 are provided in the notebook `cDMRG_basis_splitting.nb`.
