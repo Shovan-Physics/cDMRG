@@ -13,21 +13,21 @@ In order to get this code running on your machine follow these steps.
 
 - We've tested this package on Unix only, however running on Win10 should be straighforward
   with the build tools.
-- [Install and build ITensor 3 (C++ version)](https://itensor.org/)
-- [Install Mathematica ???](https://www.wolfram.com/mathematica/)
+- [Install and build ITensor 3 (C++ version)](https://itensor.org/).
+- [Install Mathematica 12.3](https://www.wolfram.com/mathematica/) or newer.
 
-### First steps
+### Build
 
-- Clone this repository ANYWHERE OR SOME SPECIAL LOCATION WITH RESPECT TO ITENSOR DIR???
-- Update configs ONLY THE MAKEFILE?
+- Clone this repository on you machine.
+- Update `DIR` in `make_cDMRG` that it points to the ITensor directory.
 - Build binaries:
   ```console
-  make build
+  make -f make_cDMRG
   ```
-- THAT'S IT?
-- WHICH COMMAND TO RUN AND HOW TO CHECK THE RESULT
+- Among other files you should find `cDMRG` executable that will be used by the front-end Mathematica script,
+  which is described below.
 
-## Structure
+## Code Structure
 
 cDMRG consists of two main modules:
 - DMRG Module using the ITensor library 
@@ -35,7 +35,7 @@ cDMRG consists of two main modules:
 
 ### DMRG Module
 
-The DMRG module is built from 3 source files and 5 header files:
+The DMRG module consists of the following files:
 
 - `cDMRG.cc` - main block
 - `cio.h`, `cio.cc` - input/output
@@ -44,10 +44,6 @@ The DMRG module is built from 3 source files and 5 header files:
 - `cDMRGeps.h` - DMRG sweeps
 - `localmpoproj.h` - Hamiltonian MPOs
 
-First install the C++ version of ITensor: https://itensor.org/.
-Change the address in the make file `make_cDMRG` to point to the built ITensor library.
-Then run the make file from command line. It should produce an executable file named `cDMRG`.
-
 ### Input Module
 
 The DMRG module is called by the Mathematica package `cDMRG_input.m`, which generates the necessary
@@ -55,26 +51,30 @@ inputs (local basis and operators) for DMRG.
 A separate documentation of `cDMRG_input.m` is provided in the notebook `cDMRG_input_documentation.nb`.
 The package can be modified by changing the notebook `cDMRG_input.nb` and saving it as a package `.m`.
 
-One calls the program from command line as 
+## How to Use
 
+Call the program from the command line as 
 ```consol
 math -noprompt -run '<<cDMRG_input.m' N gamma Nwell V0 M basisid epsid saveid &
 ```
 
 where
 
-- `N` - number of particles
-- `gamma` - dimensionless interaction strength
-- `Nwell` - number of potential minima
-- `V0` - potential depth in units of recoil
-- `M` - number of segments
-- `basisid` - ID for basis parameters
-- `epsid` - ID for DMRG parameters
-- `saveid` - ID for save parameters.
+- `N` - `int` number of particles
+- `gamma` - `float` dimensionless interaction strength
+- `Nwell` - `int` number of potential minima
+- `V0` - `float` potential depth in units of recoil
+- `M` - `int` number of segments
+- `basisid` - `int` ID for basis parameters
+- `epsid` - `int` ID for DMRG parameters
+- `saveid` - `int` ID for save parameters
+
+For instance a short calculation can be initiated by
+```consol
+math -noprompt -run '<<cDMRG_input.m' 2 0.1 4 1.0 20 1 1 1 &
+```
 
 The results are stored in the directory `Runs`.
-
-## Usage Details
 
 ### IDs / Stored Inputs
 
