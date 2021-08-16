@@ -2,7 +2,7 @@
 
 cDMRG enables the application of the Density-Matrix Renormalization Group (DMRG) to continuous quantum
 systems by spatial partitioning into segments with continuous basis functions.
-It is distinct from cMPS.
+It is based on [arXiv:2108.05366](https://arxiv.org/abs/2108.05366) and distinct from cMPS.
 The code is written for bosons with contact interactions trapped in a box with a sinusoidal potential.
 
 ## Installation
@@ -11,10 +11,13 @@ In order to get this code running on your machine follow these steps.
 
 ### Prerequisites
 
-- We've tested this package on Unix only, however running on Win10 should be straighforward
-  with the build tools.
+- We've tested this package on Unix only, however running on Win10 should be straightforward
+  with the build tools installed.
+  We recommend the package manager for Windows [Chocolatey](https://chocolatey.org/),
+  then you can simply run `choco install make`.
 - [Install and build ITensor 3 (C++ version)](https://itensor.org/).
 - [Install Mathematica 12.3](https://www.wolfram.com/mathematica/) or newer.
+  We did not test older versions and it's likely they work as well.
 
 ### Build
 
@@ -62,7 +65,7 @@ where
 
 - `N` - `int` number of particles
 - `gamma` - `float` dimensionless interaction strength
-- `Nwell` - `int` number of potential minima
+- `Nwell` - `float` number of potential minima
 - `V0` - `float` potential depth in units of recoil
 - `M` - `int` number of segments
 - `basisid` - `int` ID for basis parameters
@@ -71,7 +74,7 @@ where
 
 For instance a short calculation can be initiated by
 ```consol
-math -noprompt -run '<<cDMRG_input.m' 2 0.1 4 1.0 20 1 1 1 &
+math -noprompt -run '<<cDMRG_input.m' 4 10 4 1 8 1 1 1 &
 ```
 
 The results are stored in the directory `Runs`.
@@ -91,4 +94,4 @@ Results from a sample run are stored in the `Runs` directory and illustrated wit
 
 Codes for splitting a segment at an arbitrary point, and calculating the bipartite entanglement
 are provided in the notebook `cDMRG_basis_splitting.nb`.
-An example is given using the output MPS from the DMRG module.
+An example is given using the output MPS from the DMRG module using the output stored in "Runs".
