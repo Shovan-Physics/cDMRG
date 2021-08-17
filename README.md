@@ -25,7 +25,7 @@ In order to get this code running on your machine follow these steps.
 - Update `DIR` in `Makefile` that it points to the ITensor directory.
 - Build binaries:
   ```console
-  make
+  make build
   ```
 - Among other files you should find `cDMRG` executable that will be used by the front-end Mathematica script,
   which is described below.
