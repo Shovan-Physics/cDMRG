@@ -94,4 +94,4 @@ Results from a sample run are stored in the `Runs` directory and illustrated wit
 
 Codes for splitting a segment at an arbitrary point, and calculating the bipartite entanglement
 are provided in the notebook `cDMRG_basis_splitting.nb`.
-An example is given using the output MPS from the DMRG module using the output stored in "Runs".
+An example is given using the output MPS stored in `Runs`.
