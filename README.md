@@ -22,10 +22,10 @@ In order to get this code running on your machine follow these steps.
 ### Build
 
 - Clone this repository on you machine.
-- Update `DIR` in `make_cDMRG` that it points to the ITensor directory.
+- Update `DIR` in `Makefile` that it points to the ITensor directory.
 - Build binaries:
   ```console
-  make -f make_cDMRG
+  make build
   ```
 - Among other files you should find `cDMRG` executable that will be used by the front-end Mathematica script,
   which is described below.
