@@ -99,7 +99,7 @@ The results are stored in the directory `Runs`.
 
 Results from a sample run are stored in the `Runs` directory and illustrated with plots in the notebook `cDMRG_example_output.nb`.
 
-### Basis splitting
+### Basis Splitting
 
 Codes for splitting a segment at an arbitrary point, and calculating the bipartite entanglement
 are provided in the notebook `cDMRG_basis_splitting.nb`.
