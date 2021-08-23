@@ -3,7 +3,8 @@
 cDMRG enables the application of the Density-Matrix Renormalization Group (DMRG) to continuous quantum
 systems by spatial partitioning into segments with continuous basis functions.
 It is based on [arXiv:2108.05366](https://arxiv.org/abs/2108.05366) and distinct from cMPS.
-The code is written for bosons with contact interactions trapped in a box with a sinusoidal potential.
+The code is written for bosons with contact interactions trapped in a box with a sinusoidal potential,
+divided into segments of equal width.
 
 ## Installation
 
