@@ -54,7 +54,22 @@ inputs (local basis and operators) for DMRG.
 A separate documentation of `cDMRG_input.m` is provided in the notebook `cDMRG_input_documentation.nb`.
 The package can be modified by changing the notebook `cDMRG_input.nb` and saving it as a package `.m`.
 
+### IDs / Stored Inputs
+
+The parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
+`basistable.m`, `epstable.m`, and `savetable.m` in the `Parameters` directory,
+with unique integer pointers that act as IDs.
+One can add more entries using a text editor or the function `storenewparam` in `cDMRG_inputIDgen.nb`.
+
 ## How to Use
+
+### Store/find Input IDs
+
+Use the notebook `cDMRG_inputIDgen.nb` to 
+(1) specify parameters for the local basis, DMRG parameters, and what results to save.
+(2) check if these are already stored as inputs and find their IDs; if not, create new IDs.
+
+### Run the Program
 
 Call the program from the command line as 
 ```consol
@@ -79,14 +94,7 @@ math -noprompt -run '<<cDMRG_input.m' 4 10 4 1 8 1 1 1 &
 
 The results are stored in the directory `Runs`.
 
-### IDs / Stored Inputs
-
-The parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
-`basistable.m`, `epstable.m`, and `savetable.m` in the `Parameters` directory,
-with unique integer pointers that act as IDs.
-One can add more entries using a text editor or the function `storenewparam` in `cDMRG_input_documentation.nb`.
-
-### Sample Outputs
+### Visualize Outputs
 
 Results from a sample run are stored in the `Runs` directory and illustrated with plots in the notebook `cDMRG_example_output.nb`.
 
