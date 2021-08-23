@@ -57,7 +57,7 @@ The package can be modified by changing the notebook `cDMRG_input.nb` and saving
 
 ### IDs / Stored Inputs
 
-The parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
+Parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
 `basistable.m`, `epstable.m`, and `savetable.m` in the `Parameters` directory,
 with unique integer pointers that act as IDs.
 One can add more entries using a text editor or the function `storenewparam` in `cDMRG_inputIDgen.nb`.
