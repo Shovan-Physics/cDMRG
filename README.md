@@ -29,7 +29,7 @@ In order to get this code running on your machine follow these steps.
   make build
   ```
 - Among other files you should find `cDMRG` executable that will be used by the front-end Mathematica script,
-  which is described below.
+  which are described below.
 
 ## Code Structure
 
