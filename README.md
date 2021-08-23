@@ -67,7 +67,7 @@ One can add more entries using a text editor or the function `storenewparam` in 
 ### Store/find Input IDs
 
 Use the notebook `cDMRG_inputIDgen.nb` to 
-(1) specify parameters for the local basis, DMRG parameters, and what results to save.
+(1) specify parameters for the local basis, DMRG parameters, and what results to save,
 (2) check if these are already stored as inputs and find their IDs; if not, create new IDs.
 
 ### Run the Program
