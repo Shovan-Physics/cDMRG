@@ -1,0 +1,575 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     22304,        567]
+NotebookOptionsPosition[     19288,        513]
+NotebookOutlinePosition[     19679,        529]
+CellTagsIndexPosition[     19636,        526]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Store input parameters with IDs", "Title",
+ CellChangeTimes->{{3.838741668563835*^9, 
+  3.838741692163404*^9}},ExpressionUUID->"83424f25-165a-46e2-bb59-\
+0e44728e4e79"],
+
+Cell["\<\
+We (permanently) store the basis, DMRG, and save parameters with unique \
+(integer) IDs in separate files in the \[OpenCurlyDoubleQuote]Parameters\
+\[CloseCurlyDoubleQuote] directory: \[OpenCurlyDoubleQuote]basistable.m\
+\[CloseCurlyDoubleQuote], \[OpenCurlyDoubleQuote]epstable.m\
+\[CloseCurlyDoubleQuote], and \[OpenCurlyDoubleQuote]savetable.m\
+\[CloseCurlyDoubleQuote].  For a given run with a particular set of \
+parameters, we call the corresponding integer labels by \
+\[OpenCurlyDoubleQuote]cDMRG_input.m\[CloseCurlyDoubleQuote].\
+\>", "Text",
+ CellChangeTimes->{{3.837011268424872*^9, 3.8370112752830276`*^9}, {
+   3.837011310145906*^9, 3.837011352306625*^9}, {3.837011400097548*^9, 
+   3.8370114419819813`*^9}, {3.83701150539817*^9, 3.837011524604567*^9}, {
+   3.8370115678411703`*^9, 3.837011654786975*^9}, {3.837012246508762*^9, 
+   3.8370122475916843`*^9}, {3.837012352917693*^9, 3.8370123530724983`*^9}, {
+   3.8370136800483828`*^9, 3.83701368766789*^9}, {3.83873501951292*^9, 
+   3.838735066770583*^9}, 3.8387351052275677`*^9, {3.838735189734432*^9, 
+   3.838735317087183*^9}, {3.838741638020968*^9, 
+   3.83874163965732*^9}},ExpressionUUID->"131cecf4-b9b6-4f20-8c7a-\
+bd684900ee07"],
+
+Cell["\<\
+Here we define a function for adding new entries to these input files. First, \
+let us set the default directory to the notebook directory.\
+\>", "Text",
+ CellChangeTimes->{{3.838735324705575*^9, 
+  3.8387353936679792`*^9}},ExpressionUUID->"6ac47e5b-7dd6-46bb-ad87-\
+14aad092b5ad"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDirectory", "@", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.838735476481084*^9, 3.83873547833458*^9}},
+ CellLabel->"In[86]:=",ExpressionUUID->"1171d9fd-90b8-43a8-80d7-d04cee910df3"],
+
+Cell["\<\
+The following function checks whether a given set of parameters already \
+exists in a file. If yes, it prints the corresponding ID. If not, it adds a \
+new entry and prints the new ID.\
+\>", "Text",
+ CellChangeTimes->{{3.8387354916696997`*^9, 
+  3.838735625773535*^9}},ExpressionUUID->"16b29d2a-f3a8-4335-842f-\
+37f5ef1f67b1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"storenewparam", "[", 
+   RowBox[{"filename_", ",", "params_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"file", ",", "pos"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"file", "=", 
+      RowBox[{"Import", "[", "filename", "]"}]}], ";", "\[IndentingNewLine]", 
+     
+     RowBox[{"pos", "=", 
+      RowBox[{"Position", "[", 
+       RowBox[{"file", ",", "params"}], "]"}]}], ";", " ", 
+     RowBox[{"(*", 
+      RowBox[{"position", " ", "in", " ", "file"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"pos", "!=", 
+        RowBox[{"{", "}"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Found\>\"", ",", 
+         RowBox[{"pos", "[", 
+          RowBox[{"[", 
+           RowBox[{"1", ",", "1"}], "]"}], "]"}]}], "}"}], ",", " ", 
+       RowBox[{"(*", 
+        RowBox[{"found", ",", " ", 
+         RowBox[{"print", " ", "ID"}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Export", "[", 
+         RowBox[{"filename", ",", 
+          RowBox[{"Append", "[", 
+           RowBox[{"file", ",", 
+            RowBox[{
+             RowBox[{"1", "+", 
+              RowBox[{"Length", "[", "file", "]"}]}], "->", "params"}]}], 
+           "]"}]}], "]"}], ";", " ", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"not", " ", "found"}], ",", " ", 
+          RowBox[{"add", " ", "as", " ", "the", " ", "last", " ", "entry"}]}],
+          "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"\"\<Added\>\"", ",", 
+          RowBox[{"1", "+", 
+           RowBox[{"Length", "[", "file", "]"}]}]}], "}"}]}]}], " ", 
+      RowBox[{"(*", 
+       RowBox[{
+       "indicate", " ", "that", " ", "the", " ", "entry", " ", "was", " ", 
+        "added", " ", "with", " ", "a", " ", "new", " ", "ID"}], "*)"}], 
+      "]"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.838735634628252*^9, 3.8387356406792507`*^9}},
+ CellLabel->"In[87]:=",ExpressionUUID->"a34bf821-6e00-4bbe-91c3-b8023ccddb92"],
+
+Cell[CellGroupData[{
+
+Cell["Basis parameters", "Subsection",
+ CellChangeTimes->{{3.838735687968347*^9, 
+  3.8387356928275633`*^9}},ExpressionUUID->"6db04baf-a91d-4eaf-9b4a-\
+628d329c28d0"],
+
+Cell[TextData[{
+ "The local basis is uniquely specified by the maximum monomial degree and \
+maximum number of basis states for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{" ", 
+    RowBox[{
+     RowBox[{"n", "=", "1"}], ",", "2", ",", 
+     RowBox[{"...", 
+      SubscriptBox["n", "max"]}]}]}], TraditionalForm]],ExpressionUUID->
+  "eb021995-c96c-46b7-be5a-5288cb123553"],
+ ".  We store these as a list of pairs -- for each ",
+ Cell[BoxData[
+  FormBox["n", TraditionalForm]],ExpressionUUID->
+  "819f1176-d117-4587-a2bd-f76c3e3ffc7e"],
+ ", the first number denotes ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["d", "max"], TraditionalForm]],ExpressionUUID->
+  "92da0235-4afd-42a6-8488-ee8467f9c9f3"],
+ " and the 2nd number is the maximum number of basis states retained.  Below \
+is an example, representing Basis A in Table S3 of the supplement.  To choose \
+a different basis, just change the numbers."
+}], "Text",
+ CellChangeTimes->{{3.838735729431015*^9, 3.838735731572968*^9}, {
+  3.838735766414556*^9, 3.8387358795949078`*^9}, {3.838735948845812*^9, 
+  3.838736021354418*^9}, {3.838741767816461*^9, 
+  3.8387418026542683`*^9}},ExpressionUUID->"946a08b3-0028-46b0-b2f5-\
+ce2d959fe2b9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"basisparams", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"3", ",", "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "10"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "20"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "35"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "50"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "30"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "15"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "2"}], "}"}]}], "}"}]}], ";"}]], "Input",
+ CellLabel->
+  "In[115]:=",ExpressionUUID->"0997dfc7-c010-4e69-bb2b-3894ad7dbacb"],
+
+Cell["\<\
+Check if the basis is stored as input, if not add a new entry.\
+\>", "Text",
+ CellChangeTimes->{{3.838736044485907*^9, 
+  3.83873607066982*^9}},ExpressionUUID->"466c79b0-0808-427a-a60b-\
+3992fc266475"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"storenewparam", "[", 
+  RowBox[{"\"\<Parameters/basistable.m\>\"", ",", "basisparams"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.8387360778111134`*^9, 3.8387360799035053`*^9}},
+ CellLabel->
+  "In[116]:=",ExpressionUUID->"649c434c-351c-4e77-82e1-4bb7cea7aee2"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Found\"\>", ",", "2"}], "}"}]], "Output",
+ CellChangeTimes->{{3.838736074524683*^9, 3.8387360808587723`*^9}, 
+   3.838741810393229*^9},
+ CellLabel->
+  "Out[116]=",ExpressionUUID->"8ffd457d-7461-45f3-8175-76a56c0c0cc0"]
+}, Open  ]],
+
+Cell["\<\
+To select this basis, call its ID (= 2) from the command line.\
+\>", "Text",
+ CellChangeTimes->{{3.838736100781024*^9, 
+  3.838736164839109*^9}},ExpressionUUID->"1b7330d3-7fc2-48f6-91c7-\
+e67cac877a59"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DMRG parameters", "Subsection",
+ CellChangeTimes->{{3.838735687968347*^9, 3.8387356928275633`*^9}, {
+  3.838736211504084*^9, 
+  3.838736211910776*^9}},ExpressionUUID->"afb30fca-45dc-4fd4-a422-\
+496bdca7e7fb"],
+
+Cell["\<\
+As detailed in Sec. SIII of the supplement, we execute multiple DMRG cycles \
+with increasing energy penalty \[CapitalLambda] for discontinuities.  In the \
+DMRG code, \[CapitalLambda] is called 1/eps.  Each of these eps sweeps has \
+its own set of numerical parameters.  Below is an example.  Again, to set \
+different DMRG parameters, just change the numbers.\
+\>", "Text",
+ CellChangeTimes->{{3.837014275309948*^9, 3.837014299940096*^9}, {
+  3.837014330765626*^9, 3.837014365356064*^9}, {3.8370145386773663`*^9, 
+  3.837014702670723*^9}, {3.838736244315341*^9, 
+  3.838736284048279*^9}},ExpressionUUID->"3d062fed-de0a-4843-a3ec-\
+955963ed7db6"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"epsparams", "=", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<targetdisc\>\"", "->", 
+      RowBox[{"10.", "^", 
+       RowBox[{"-", "12"}]}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "stop", " ", "if", " ", "discontinuity", " ", "reaches", " ", "below", 
+       " ", "this", " ", "threshold"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<eps\>\"", "->", 
+      RowBox[{"10.", "^", 
+       RowBox[{"-", 
+        RowBox[{"Range", "[", "6", "]"}]}]}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "penalty", " ", "increases", " ", "in", " ", "factors", " ", "of", " ", 
+       "10"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<MaxIters\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{"30", ",", "40", ",", "40", ",", "40", ",", "30", ",", "20"}], 
+       "}"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "maximum", " ", "eigensolver", " ", "iteration", " ", "in", " ", "each",
+        " ", "cycle"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<cutoffs\>\"", "->", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{
+        RowBox[{"10.", "^", 
+         RowBox[{"-", "14"}]}], ",", "6"}], "]"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "truncate", " ", "singular", " ", "values", " ", "smaller", " ", "than",
+        " ", "this", " ", "cutoff"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<MaxDim\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{
+       "20", ",", "30", ",", "40", ",", "50", ",", "100", ",", "200"}], 
+       "}"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{"maximum", " ", "bond", " ", "dimension"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<epsthresh\>\"", "->", 
+      RowBox[{"10.", "^", 
+       RowBox[{"-", 
+        RowBox[{"Range", "[", 
+         RowBox[{"3", ",", "8"}], "]"}]}]}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{"convergence", " ", "threshold"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<maxsweeps\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{"10", ",", "10", ",", "10", ",", "20", ",", "30", ",", "50"}], 
+       "}"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{"maximum", " ", "number", " ", "of", " ", "sweeps"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<Noise\>\"", "->", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "6"}], "]"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "any", " ", "noise", " ", "added", " ", "to", " ", "aid", " ", 
+       "convergence"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<minsweeps\>\"", "->", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"1", ",", "6"}], "]"}]}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{"minimum", " ", "number", " ", "of", " ", "sweeps"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<MinDim\>\"", "->", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"1", ",", "6"}], "]"}]}]}], " ", 
+    RowBox[{"(*", 
+     RowBox[{"minimum", " ", "bond", " ", "dimension"}], "*)"}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.837014788115842*^9, 3.837014866889324*^9}, {
+  3.83701490402783*^9, 3.837015069753104*^9}, {3.8370151001207247`*^9, 
+  3.8370153426114264`*^9}},
+ CellLabel->
+  "In[117]:=",ExpressionUUID->"acbb4c22-8a3a-44f3-b4d1-90f82cafb170"],
+
+Cell["\<\
+Check if this set of parameters is stored as input, if not add a new entry.\
+\>", "Text",
+ CellChangeTimes->{{3.838736044485907*^9, 3.83873607066982*^9}, {
+  3.838736305392908*^9, 
+  3.838736317342682*^9}},ExpressionUUID->"4c1d0c86-530c-4534-8e3a-\
+b3111db58fdc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"storenewparam", "[", 
+  RowBox[{"\"\<Parameters/epstable.m\>\"", ",", "epsparams"}], "]"}]], "Input",\
+
+ CellChangeTimes->{{3.838736327656148*^9, 3.838736336491604*^9}},
+ CellLabel->
+  "In[118]:=",ExpressionUUID->"f5f5c619-a029-477a-a80c-32757d414154"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Found\"\>", ",", "1"}], "}"}]], "Output",
+ CellChangeTimes->{{3.8387363302939367`*^9, 3.838736337007792*^9}, 
+   3.838741813534204*^9},
+ CellLabel->
+  "Out[118]=",ExpressionUUID->"64303da1-09cc-4c49-8171-7c105e0b213a"]
+}, Open  ]],
+
+Cell["\<\
+To select this basis, call its ID (= 1) from the command line.\
+\>", "Text",
+ CellChangeTimes->{{3.838736100781024*^9, 3.838736164839109*^9}, {
+  3.8387363557357492`*^9, 
+  3.838736355778487*^9}},ExpressionUUID->"d3b19f28-d438-4053-ae17-\
+3efed416cf3b"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Save parameters", "Subsection",
+ CellChangeTimes->{{3.838735687968347*^9, 3.8387356928275633`*^9}, {
+  3.838736211504084*^9, 3.838736211910776*^9}, {3.838736408073638*^9, 
+  3.8387364085046988`*^9}},ExpressionUUID->"53b44e95-71d9-424c-96fe-\
+5886159e053c"],
+
+Cell["\<\
+These are parameters specifying what results to save.  Below is an example.\
+\>", "Text",
+ CellChangeTimes->{{3.838736411031888*^9, 
+  3.838736437075177*^9}},ExpressionUUID->"8165e609-5599-43b3-9f32-\
+f71ff493371e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"saveparams", "=", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<maxpower\>\"", "->", "Infinity"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "maximum", " ", "number", " ", "of", " ", "polynomial", " ", 
+       "coefficients", " ", "retained", " ", "for", " ", "psi", 
+       RowBox[{"(", "x", ")"}], " ", "or", " ", "density", 
+       RowBox[{"(", "x", ")"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savefinalmeas\>\"", "->", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"save", " ", "final", " ", "energies"}], ",", " ", 
+       RowBox[{"bond", " ", "dimensions"}], ",", " ", 
+       RowBox[{"sweep", " ", "numbers"}], ",", " ", 
+       RowBox[{
+       "computation", " ", "times", " ", "for", " ", "each", " ", "cycle"}]}],
+       "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savewf\>\"", "->", "False"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"save", " ", "the", " ", "final"}], ",", " ", 
+       RowBox[{"ground", "-", 
+        RowBox[{
+        "state", " ", "MPS", " ", "in", " ", "ITensor", " ", "format"}]}]}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savewfMMA\>\"", "->", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"save", " ", "the", " ", "final"}], ",", " ", 
+       RowBox[{"ground", "-", 
+        RowBox[{"state", " ", "MPS", " ", "in", " ", "Mathematica", " ", 
+         RowBox[{"format", " ", "--"}], " ", "sparse", " ", "array"}]}]}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savespcorr\>\"", "->", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+       "save", " ", "polynomial", " ", "coefficients", " ", "of", " ", 
+        "single"}], "-", 
+       RowBox[{
+       "particle", " ", "correlations", " ", "in", " ", "the", " ", "final", 
+        " ", "state"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savennavg\>\"", "->", "False"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+       "save", " ", "polynomial", " ", "coefficients", " ", "of", " ", 
+        "density"}], "-", 
+       RowBox[{
+       "density", " ", "expectations", " ", "in", " ", "the", " ", "final", 
+        " ", "state"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<saveentropy\>\"", "->", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "save", " ", "the", " ", "von", " ", "Neumann", " ", "entanglement", 
+       " ", "entropy", " ", "at", " ", "the", " ", "segment", " ", 
+       "boundaries", " ", "in", " ", "the", " ", "final", " ", "state"}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<savelocaldms\>\"", "->", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "save", " ", "the", " ", "reduced", " ", "density", " ", "matrices", 
+       " ", "describing", " ", "each", " ", "segment", " ", "in", " ", "the", 
+       " ", "final", " ", "state"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<saveenergyhistory\>\"", "\[Rule]", "True"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "save", " ", "the", " ", "energy", " ", "with", " ", "and", " ", 
+       "without", " ", "penalty", " ", "after", " ", "each", " ", "local", 
+       " ", "minimization"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<store_local_history\>\"", "\[Rule]", "False"}], ",", " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "save", " ", "the", " ", "local", " ", "density", " ", "matrices", " ", 
+       "after", " ", "each", " ", "sweep"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<store_local_history_eps\>\"", "\[Rule]", "False"}], ",", 
+     " ", 
+     RowBox[{"(*", 
+      RowBox[{
+      "save", " ", "the", " ", "local", " ", "density", " ", "matrices", " ", 
+       "after", " ", "each", " ", "eps", " ", "cycle"}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<savethresh\>\"", "\[Rule]", 
+      RowBox[{"10.", "^", 
+       RowBox[{"-", "8"}]}]}]}], " ", 
+    RowBox[{"(*", 
+     RowBox[{
+     "do", " ", "not", " ", "save", " ", "numbers", " ", "smaller", " ", 
+      "than", " ", "this"}], "*)"}], "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{3.838736448754238*^9},
+ CellLabel->
+  "In[119]:=",ExpressionUUID->"ce6f109d-a7f1-4014-8002-61f05c337b06"],
+
+Cell["Check if this set is already stored, if not add a new entry.", "Text",
+ CellChangeTimes->{{3.838736470725836*^9, 
+  3.838736485691016*^9}},ExpressionUUID->"5f9bd836-eacc-4c73-88ca-\
+980e1e9a611d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"storenewparam", "[", 
+  RowBox[{"\"\<Parameters/savetable.m\>\"", ",", "saveparams"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{3.838736498283506*^9},
+ CellLabel->
+  "In[120]:=",ExpressionUUID->"29e60b8e-ed7e-4df1-9a10-3862b14f8ced"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"Found\"\>", ",", "1"}], "}"}]], "Output",
+ CellChangeTimes->{3.838736498863132*^9, 3.838741816285151*^9},
+ CellLabel->
+  "Out[120]=",ExpressionUUID->"ec504d11-fc19-4739-a08e-031bee1e8290"]
+}, Open  ]],
+
+Cell["\<\
+To select this basis, call its ID (= 1) from the command line.\
+\>", "Text",
+ CellChangeTimes->{{3.838736100781024*^9, 3.838736164839109*^9}, {
+  3.8387363557357492`*^9, 
+  3.838736355778487*^9}},ExpressionUUID->"4276c2f7-a37f-483c-91df-\
+271a3f2a9de2"]
+}, Closed]]
+}, Open  ]]
+},
+WindowSize->{1240, 675},
+WindowMargins->{{Automatic, 8}, {Automatic, 0}},
+FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (May 11, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"6507ceba-f577-42cd-89f5-be0d1d23e4c2"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 174, 3, 98, "Title",ExpressionUUID->"83424f25-165a-46e2-bb59-0e44728e4e79"],
+Cell[757, 27, 1208, 19, 58, "Text",ExpressionUUID->"131cecf4-b9b6-4f20-8c7a-bd684900ee07"],
+Cell[1968, 48, 291, 6, 35, "Text",ExpressionUUID->"6ac47e5b-7dd6-46bb-ad87-14aad092b5ad"],
+Cell[2262, 56, 262, 5, 30, "Input",ExpressionUUID->"1171d9fd-90b8-43a8-80d7-d04cee910df3"],
+Cell[2527, 63, 336, 7, 35, "Text",ExpressionUUID->"16b29d2a-f3a8-4335-842f-37f5ef1f67b1"],
+Cell[2866, 72, 2098, 55, 157, "Input",ExpressionUUID->"a34bf821-6e00-4bbe-91c3-b8023ccddb92"],
+Cell[CellGroupData[{
+Cell[4989, 131, 166, 3, 54, "Subsection",ExpressionUUID->"6db04baf-a91d-4eaf-9b4a-628d329c28d0"],
+Cell[5158, 136, 1186, 28, 81, "Text",ExpressionUUID->"946a08b3-0028-46b0-b2f5-ce2d959fe2b9"],
+Cell[6347, 166, 762, 24, 30, "Input",ExpressionUUID->"0997dfc7-c010-4e69-bb2b-3894ad7dbacb"],
+Cell[7112, 192, 211, 5, 35, "Text",ExpressionUUID->"466c79b0-0808-427a-a60b-3992fc266475"],
+Cell[CellGroupData[{
+Cell[7348, 201, 285, 6, 30, "Input",ExpressionUUID->"649c434c-351c-4e77-82e1-4bb7cea7aee2"],
+Cell[7636, 209, 262, 6, 34, "Output",ExpressionUUID->"8ffd457d-7461-45f3-8175-76a56c0c0cc0"]
+}, Open  ]],
+Cell[7913, 218, 212, 5, 35, "Text",ExpressionUUID->"1b7330d3-7fc2-48f6-91c7-e67cac877a59"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8162, 228, 214, 4, 38, "Subsection",ExpressionUUID->"afb30fca-45dc-4fd4-a422-496bdca7e7fb"],
+Cell[8379, 234, 657, 11, 58, "Text",ExpressionUUID->"3d062fed-de0a-4843-a3ec-955963ed7db6"],
+Cell[9039, 247, 3308, 83, 241, "Input",ExpressionUUID->"acbb4c22-8a3a-44f3-b4d1-90f82cafb170"],
+Cell[12350, 332, 273, 6, 35, "Text",ExpressionUUID->"4c1d0c86-530c-4534-8e3a-b3111db58fdc"],
+Cell[CellGroupData[{
+Cell[12648, 342, 276, 6, 30, "Input",ExpressionUUID->"f5f5c619-a029-477a-a80c-32757d414154"],
+Cell[12927, 350, 262, 6, 34, "Output",ExpressionUUID->"64303da1-09cc-4c49-8171-7c105e0b213a"]
+}, Open  ]],
+Cell[13204, 359, 263, 6, 35, "Text",ExpressionUUID->"d3b19f28-d438-4053-ae17-3efed416cf3b"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13504, 370, 262, 4, 38, "Subsection",ExpressionUUID->"53b44e95-71d9-424c-96fe-5886159e053c"],
+Cell[13769, 376, 225, 5, 35, "Text",ExpressionUUID->"8165e609-5599-43b3-9f32-f71ff493371e"],
+Cell[13997, 383, 4265, 95, 283, "Input",ExpressionUUID->"ce6f109d-a7f1-4014-8002-61f05c337b06"],
+Cell[18265, 480, 202, 3, 35, "Text",ExpressionUUID->"5f9bd836-eacc-4c73-88ca-980e1e9a611d"],
+Cell[CellGroupData[{
+Cell[18492, 487, 255, 6, 30, "Input",ExpressionUUID->"29e60b8e-ed7e-4df1-9a10-3862b14f8ced"],
+Cell[18750, 495, 232, 5, 34, "Output",ExpressionUUID->"ec504d11-fc19-4739-a08e-031bee1e8290"]
+}, Open  ]],
+Cell[18997, 503, 263, 6, 35, "Text",ExpressionUUID->"4276c2f7-a37f-483c-91df-271a3f2a9de2"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
