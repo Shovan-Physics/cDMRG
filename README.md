@@ -23,7 +23,7 @@ In order to get this code running on your machine follow these steps.
 ### Build
 
 - Clone this repository on you machine.
-- Update `DIR` in `Makefile` that it points to the ITensor directory.
+- Update `DIR` in `Makefile` such that it points to the ITensor directory.
 - Build binaries:
   ```console
   make build
@@ -60,7 +60,7 @@ The package can be modified by changing the notebook `cDMRG_input.nb` and saving
 Parameters specifying the local basis, DMRG sweeps, and what results to save are stored in
 `basistable.m`, `epstable.m`, and `savetable.m` in the `Parameters` directory,
 with unique integer pointers that act as IDs.
-One can add more entries using a text editor or the function `storenewparam` in `cDMRG_inputIDgen.nb`.
+One can add more entries using a text editor or using the function `storenewparam` in `cDMRG_inputIDgen.nb`.
 
 ## How to Use
 
